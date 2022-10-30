@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HighCouplingAPI", "HighCouplingAPI\HighCouplingAPI.csproj", "{28D3CC33-9838-4D78-9764-AD3D728B7505}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LowCouplingAPI", "LowCouplingAPI\LowCouplingAPI.csproj", "{A8E70FCE-7516-4B4C-B306-4FF1424A6CAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28D3CC33-9838-4D78-9764-AD3D728B7505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D3CC33-9838-4D78-9764-AD3D728B7505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D3CC33-9838-4D78-9764-AD3D728B7505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D3CC33-9838-4D78-9764-AD3D728B7505}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8E70FCE-7516-4B4C-B306-4FF1424A6CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8E70FCE-7516-4B4C-B306-4FF1424A6CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8E70FCE-7516-4B4C-B306-4FF1424A6CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8E70FCE-7516-4B4C-B306-4FF1424A6CAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CFCEC873-FC94-40E4-8CCA-C3F36FBAEEC7}
+	EndGlobalSection
+EndGlobal
