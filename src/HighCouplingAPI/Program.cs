@@ -1,3 +1,5 @@
+using HighCouplingAPI.Application;
+
 namespace HighCouplingAPI
 {
     public class Program
@@ -8,7 +10,9 @@ namespace HighCouplingAPI
 
             // Add services to the container.
 
+            builder.Services.AddTransient<IRepositoryBase, RepositoryBase>();
             builder.Services.AddControllers();
+
 
             var app = builder.Build();
 
