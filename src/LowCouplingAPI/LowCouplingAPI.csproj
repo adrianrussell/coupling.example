@@ -9,5 +9,9 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="LowCouplingAPI.Test" />
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <PackageReference Include="Encoding-Converters-Core" Version="0.5.1" />
+	</ItemGroup>
 
 </Project>

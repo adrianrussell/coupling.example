@@ -1,4 +1,5 @@
 using LowCouplingAPI.Application;
+using LowCouplingAPI.Controllers;
 
 namespace LowCouplingAPI
 {
@@ -10,7 +11,7 @@ namespace LowCouplingAPI
 
             // Add services to the container.
             builder.Services.AddTransient<IRepositoryBase, RepositoryBase>();
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(option => option.JsonSerializerOptions.Converters.Add(new MeasurementJsonConverter()));
 
             var app = builder.Build();
 
@@ -19,8 +20,7 @@ namespace LowCouplingAPI
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
-
+            
             app.MapControllers();
 
             app.Run();
