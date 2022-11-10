@@ -38,6 +38,14 @@ public class TemperatureMeasurement : GenericMeasurement<decimal>
     }
 }
 
+public class RainMeasurement : GenericMeasurement<decimal>
+{
+    public RainMeasurement()
+    {
+        Type = "Rain";
+    }
+}
+
 public class MeasurementJsonConverter : JsonConverter<Measurement>
 {
     public override bool CanConvert(Type typeToConvert) =>
@@ -68,6 +76,7 @@ public class MeasurementJsonConverter : JsonConverter<Measurement>
             "WindDirection" => new WindDirectionMeasurement(),
             "WindSpeed" => new WindSpeedMeasurement(),
             "Temperature" => new TemperatureMeasurement(),
+            "Rain" => new RainMeasurement(),
 
             _ => throw new JsonException("Conversion of Type Not Supported")
         };
@@ -93,6 +102,9 @@ public class MeasurementJsonConverter : JsonConverter<Measurement>
                                 break;
                             case TemperatureMeasurement temperatureMeasurement:
                                 temperatureMeasurement.Value = reader.GetDecimal();
+                                break;
+                            case RainMeasurement rainMeasurement:
+                                rainMeasurement.Value = reader.GetDecimal();
                                 break;
                         }
                         break;
@@ -121,6 +133,11 @@ public class MeasurementJsonConverter : JsonConverter<Measurement>
                 writer.WriteString("Type", "Temperature");
                 writer.WriteNumber("Value", temperatureMeasurement.Value);
                 break;
+            case RainMeasurement rainMeasurement:
+                writer.WriteString("Type", "Rain");
+                writer.WriteNumber("Value", rainMeasurement.Value);
+                break;
+
         }
 
         writer.WriteEndObject();

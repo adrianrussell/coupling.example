@@ -5,45 +5,35 @@ namespace LowCouplingAPI.Test.Controllers
 {
     public class MeasurementFixture
     {
-        [Fact]
-        public void WindSpeedCanConvert()
+        [Theory]
+        [InlineData(true, typeof(WindSpeedMeasurement))]
+        [InlineData(true, typeof(WindDirectionMeasurement))]
+        [InlineData(true, typeof(TemperatureMeasurement))]
+        [InlineData(true, typeof(RainMeasurement))]
+
+        public void CanConvert(bool expected, Type type)
         {
             var converter = new MeasurementJsonConverter();
-            var result = converter.CanConvert(typeof(WindSpeedMeasurement));
+            var result = converter.CanConvert(type);
 
-            Assert.True(result);
+            Assert.Equal(expected,result);
         }
 
-        [Fact]
-        public void DirectionSpeed_CanConvert()
+        [Theory]
+        [InlineData("WindSpeed", 0.1, typeof(WindSpeedMeasurement))]
+        [InlineData("Temperature", 0.1, typeof(TemperatureMeasurement))]
+        [InlineData("Rain", 0.1, typeof(RainMeasurement))]
+
+        public void DecimalMeasurementReader_ValidJSON_Converts(string typeValue, decimal expected, Type type)
         {
             var converter = new MeasurementJsonConverter();
-            var result = converter.CanConvert(typeof(WindDirectionMeasurement));
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void Temperature_CanConvert()
-        {
-            var converter = new MeasurementJsonConverter();
-            var result = converter.CanConvert(typeof(TemperatureMeasurement));
-
-            Assert.True(result);
-        }
-
-
-        [Fact]
-        public void WindSpeedReader_ValidJSON_Converts()
-        {
-            var converter = new MeasurementJsonConverter();
-            string json = "{\r\n  \"Type\": \"WindSpeed\",\r\n  \"Value\": 0.1\r\n}";
+            string json = $"{{\r\n  \"Type\": \"{typeValue}\",\r\n  \"Value\": {expected}\r\n}}";
             var reader = new Utf8JsonReader(System.Text.Encoding.UTF8.GetBytes(json));
             
-            var result = converter.Read(ref reader, typeof(Measurement),new JsonSerializerOptions()) as WindSpeedMeasurement;
+            var result = (GenericMeasurement<decimal>)converter.Read(ref reader, typeof(Measurement),new JsonSerializerOptions());
 
-            Assert.IsType<WindSpeedMeasurement>(result);
-            Assert.Equal(0.1M,result!.Value);
+            Assert.IsType(type, result);
+            Assert.Equal(expected, result!.Value);
         }
         
         [Fact]
@@ -60,30 +50,20 @@ namespace LowCouplingAPI.Test.Controllers
             Assert.Equal("N", result!.Value);
         }
 
-        [Fact]
-        public void Temperature_ValidJSON_Converts()
+        [Theory]
+        [InlineData("WindSpeed", 0.1, typeof(WindSpeedMeasurement))]
+        [InlineData("Temperature", 0.1, typeof(TemperatureMeasurement))]
+        [InlineData("Rain", 0.1, typeof(RainMeasurement))]
+        public void DecimalMeasurementWriter_ValidJSON_Converts(string typeValue, decimal expected, Type type)
         {
-            var converter = new MeasurementJsonConverter();
-            string json = @"{""Type"" : ""Temperature"",""Value"" : 0.1}";
-
-            var reader = new Utf8JsonReader(System.Text.Encoding.UTF8.GetBytes(json));
-
-            var result = converter.Read(ref reader, typeof(Measurement), new JsonSerializerOptions()) as TemperatureMeasurement;
-
-            Assert.IsType<TemperatureMeasurement>(result);
-            Assert.Equal(0.1M, result!.Value);
-        }
-
-        [Fact]
-        public void WindSpeedWriter_ValidJSON_Converts()
-        {
-            var windSpeed = new WindSpeedMeasurement { Value = 0.1M };
+            var windSpeed = (GenericMeasurement<Decimal>)Activator.CreateInstance(type)!;
+            windSpeed!.Value = expected;
 
             var serializeOptions = JsonSerializerOptions();
 
             var stringValue = JsonSerializer.Serialize(windSpeed, serializeOptions);
 
-            Assert.Equal("{\r\n  \"Type\": \"WindSpeed\",\r\n  \"Value\": 0.1\r\n}", stringValue);
+            Assert.Equal($"{{\r\n  \"Type\": \"{typeValue}\",\r\n  \"Value\": {expected}\r\n}}", stringValue);
         }
 
         [Fact]
@@ -96,18 +76,6 @@ namespace LowCouplingAPI.Test.Controllers
             var stringValue = JsonSerializer.Serialize(windDirectionMeasurement, serializeOptions);
 
             Assert.Equal("{\r\n  \"Type\": \"WindDirection\",\r\n  \"Value\": \"N\"\r\n}",stringValue);
-        }
-
-        [Fact]
-        public void TemperatureWriter_ValidJSON_Converts()
-        {
-            var temperature = new TemperatureMeasurement { Value = 0.1M };
-
-            var serializeOptions = JsonSerializerOptions();
-
-            var stringValue = JsonSerializer.Serialize(temperature, serializeOptions);
-
-            Assert.Equal("{\r\n  \"Type\": \"Temperature\",\r\n  \"Value\": 0.1\r\n}", stringValue);
         }
 
         private static JsonSerializerOptions JsonSerializerOptions()
